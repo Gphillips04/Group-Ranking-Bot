@@ -38,17 +38,10 @@ game.Players.PlayerAdded:Connect(function(Player)
 			local PlayerToRank = game.Players[SplitMessage[2]]
 			
 			if Player:GetRankInGroup(groupId) >  PlayerToRank:GetRankInGroup(groupId) then
-				if string.find(LowerCaseMessage, "!rank") then
+				if string.find(LowerCaseMessage, "!passbootcamp") then
 					local RankId = SplitMessage[3]
 					rankUser(PlayerToRank.UserId, RankId)
-				elseif string.find(LowerCaseMessage, "!promote") then
-					local PlayerCurrentRank = PlayerToRank:GetRankInGroup(groupId)
-					local RankId = getNextRank(PlayerCurrentRank)
-					rankUser(PlayerToRank.UserId, RankId)
-				elseif string.find(LowerCaseMessage, "!demote") then
-					local PlayerCurrentRank = PlayerToRank:GetRankInGroup(groupId)
-					local RankId = getPreviousRank(PlayerCurrentRank)
-					rankUser(PlayerToRank.UserId, RankId)
+
 				end
 			end
 		end)
