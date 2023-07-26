@@ -1,1 +1,49 @@
+local GlitchURL = "" --Place the glitch project URL inside of the quotes
 
+function rankUser(UserId, RoleId)
+	game:GetService("HttpService"):GetAsync(GlitchURL .. "ranker?userid=" .. UserId .. "&rank=" .. RoleId)
+end
+
+local groupId = 4683405 
+local minimumRankToUseCommands = 254
+
+local groupService = game:GetService("GroupService")
+local groupInfo = groupService:GetGroupInfoAsync(groupId)
+
+function getNextRank(CurrentRank)
+	for i = 1, #groupInfo.Roles do
+		local RankId = groupInfo.Roles[i].Rank
+		if RankId > CurrentRank then
+			return RankId
+		end
+	end	
+end
+
+function getPreviousRank(CurrentRank)
+	table.sort(groupInfo.Roles, 	function(a,b) return a.Rank > b.Rank end)
+	for i = 1, #groupInfo.Roles do
+		local RankId = groupInfo.Roles[i].Rank
+		if RankId < CurrentRank then
+			return RankId
+		end
+	end	
+end
+
+game.Players.PlayerAdded:Connect(function(Player)
+	if Player:GetRankInGroup(groupId) >= minimumRankToUseCommands then
+		Player.Chatted:Connect(function(Message)
+			local LowerCaseMessage = string.lower(Message)
+			if not string.find(LowerCaseMessage, "!rank") and not string.find(LowerCaseMessage, "!promote") and not string.find(LowerCaseMessage, "!demote") then return end
+			local SplitMessage = string.split(Message, " ")
+			local PlayerToRank = game.Players[SplitMessage[2]]
+			
+			if Player:GetRankInGroup(groupId) >  PlayerToRank:GetRankInGroup(groupId) then
+				if string.find(LowerCaseMessage, "!passbootcamp") then
+					local RankId = SplitMessage[3]
+					rankUser(PlayerToRank.UserId, RankId)
+
+				end
+			end
+		end)
+	end
+end)
