@@ -5,7 +5,7 @@ function rankUser(UserId, RoleId)
 end
 
 local groupId = 4683405 
-local minimumRankToUseCommands = 254 -- Place the minimum rank to use ranking commands here
+local minimumRankToUseCommands = 254
 
 local groupService = game:GetService("GroupService")
 local groupInfo = groupService:GetGroupInfoAsync(groupId)
